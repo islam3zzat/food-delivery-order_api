@@ -1,10 +1,10 @@
 import { Response, Request, NextFunction } from 'express';
-import { authUser } from '../../../utils/auth'
+import { authUser } from '../../../utils/auth';
 
 export function register (req: Request, res: Response, next: NextFunction) {
-    authUser('local-signup', req, res, next)
+    authUser('local-signup', req, res, next);
 }
 
 export function login (req: Request, res: Response, next: NextFunction) {
-    authUser('local-signin', req, res, next)
+    authUser('local-signin', req, res, next);
 }
