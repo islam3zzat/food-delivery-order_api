@@ -9,7 +9,7 @@ export type CartModel = mongoose.Document & {
     owner: UserModel,
     deleted: boolean,
     done: boolean,
-    addOrderItem: (title: string,  quantity: number, owner: UserModel) => Promise<OrderItemModel>,
+    addOrderItems: (orderItems: Array<OrderItemModel>) => Promise<OrderItemModel>,
 };
 
 
@@ -33,11 +33,12 @@ cartSchema.statics.getDetails = function getDetails (id: string, cb: Function) {
         .exec(cb);
 };
 
-
-cartSchema.methods.addOrderItem = async function (title: string,  quantity: string, owner: string) {
+cartSchema.methods.addOrderItems = async function (orderItems: Array<OrderItemModel>) {
     const cart = this;
-    const orderItem = await OrderItem.create({title,  quantity, owner, cart: cart._id});
-    cart.orderItems.push(orderItem);
+    const addedOrderItem = await OrderItem.create(orderItems);
+    addedOrderItem.forEach(orderItem => {
+        cart.orderItems.push(orderItem);
+    });
     return cart.save();
 };
 
