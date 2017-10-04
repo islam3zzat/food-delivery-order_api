@@ -2,18 +2,18 @@ import { Document } from 'mongoose';
 import { Response, Request, NextFunction } from 'express';
 import { default as OrderItem, OrderItemModel } from '../../../models/OrderItem';
 import { default as Cart, CartModel } from '../../../models/Cart';
-import { orderLens } from '../../../utils/lens';
+import { orderLens, ordersLens } from '../../../utils/lens';
 /**
  * creates order item
  * @param {e.Request} req
  * @param {e.Response} res
  */
-export async function addOrderItem (req: Request, res: Response) {
-    const {title,  quantity, owner, cartId} = orderLens(req);
+export async function addOrderItems (req: Request, res: Response) {
+    const {orderItems, owner, cartId} = ordersLens(req);
     try {
         const cart = await Cart.findById(cartId) as CartModel;
         if ( cart ) {
-            const savedOrderItem = await cart.addOrderItem(title, quantity, owner);
+            const savedOrderItem = await cart.addOrderItems(orderItems);
             res.json(savedOrderItem);
         } else {
             res.status(404).json({message: `cart '${cartId}' was not found`});
