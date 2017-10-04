@@ -21,7 +21,6 @@ export async function addOrderItem (req: Request, res: Response) {
     } catch (err) {
         res.status(500).json(err);
     }
-
 }
 
 /**
