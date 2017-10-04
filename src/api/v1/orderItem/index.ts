@@ -3,11 +3,11 @@ const orderItemRouter = Router({mergeParams: true});
 
 import {
     deleteOrderItem,
-    addOrderItem,
+    addOrderItems,
     updateOrderItem
 } from './orderItem.controller';
 
-orderItemRouter.post('/', addOrderItem);
+orderItemRouter.post('/', addOrderItems);
 orderItemRouter.patch('/:id', updateOrderItem);
 orderItemRouter.delete('/:id', deleteOrderItem);
 
