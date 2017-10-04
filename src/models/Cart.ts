@@ -8,7 +8,8 @@ export type CartModel = mongoose.Document & {
     orderItems: [OrderItemModel],
     owner: UserModel,
     deleted: boolean,
-    done: boolean
+    done: boolean,
+    addOrderItem: (title: string,  quantity: number, owner: UserModel) => Promise<OrderItemModel>,
 };
 
 
@@ -21,6 +22,24 @@ const cartSchema = new mongoose.Schema({
     done: {type: Boolean, default: false}
 }, {timestamps: true});
 
-//
+cartSchema.statics.getDetails = function getDetails (id: string, cb: Function) {
+    return this.findById(id)
+        .populate({
+            path: 'orderItems',
+            populate: {
+                path: 'owner'
+            }
+        })
+        .exec(cb);
+};
+
+
+cartSchema.methods.addOrderItem = async function (title: string,  quantity: string, owner: string) {
+    const cart = this;
+    const orderItem = await OrderItem.create({title,  quantity, owner, cart: cart._id});
+    cart.orderItems.push(orderItem);
+    return cart.save();
+};
+
 const Cart = mongoose.model('Cart', cartSchema);
-export default Cart;
+export default Cart as typeof Cart & {getDetails: Function};
