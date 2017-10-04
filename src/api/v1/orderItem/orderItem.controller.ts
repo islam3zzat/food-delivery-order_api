@@ -11,7 +11,7 @@ import { orderLens, ordersLens } from '../../../utils/lens';
 export async function addOrderItems (req: Request, res: Response) {
     const {orderItems, owner, cartId} = ordersLens(req);
     try {
-        const cart = await Cart.findById(cartId) as CartModel;
+        const cart = await Cart.getDetails(cartId) as CartModel;
         if ( cart ) {
             const savedOrderItem = await cart.addOrderItems(orderItems);
             res.json(savedOrderItem);
