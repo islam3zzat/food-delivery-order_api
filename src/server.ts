@@ -68,12 +68,13 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator());
+console.log(process.env.MONGODB_URI || process.env.MONGOLAB_URI);
 app.use(session({
   resave: true,
   saveUninitialized: true,
   secret: process.env.SESSION_SECRET,
   store: new MongoStore({
-    url: 'mongodb://192.168.99.100:27017' || process.env.MONGODB_URI || process.env.MONGOLAB_URI,
+    url:  process.env.MONGODB_URI || process.env.MONGOLAB_URI,
     autoReconnect: true
   })
 }));
@@ -101,12 +102,7 @@ app.use((req, res, next) => {
 });
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
 
-/**
- * Primary app routes.
- */
-app.get('/', function (req, res) {
-    res.json({a: 231112});
-});
+
 app.use('/api', Api);
 
 
